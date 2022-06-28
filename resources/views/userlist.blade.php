@@ -47,8 +47,10 @@
 			@endforeach
 		</tbody>
 	</table>
+	@can('add-student')
 
 	<a class="btn btn-outline-success" href="{{route('users.create')}}">Add New User</a>
+	@endcan
 </div>
 
 @endsection

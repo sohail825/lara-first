@@ -25,6 +25,7 @@ Route::view('/', 'master');
 Route::group(['middleware'=>'auth'],function () {
 	Route::resource('/users',userslistController::class);
 	Route::resource('/admins',AdminController::class);
-	Route::view('/main', 'adminPanel');
+	Route::get('/log', [AdminController::class, 'log']);	
 });
+Route::view('/main', 'adminPanel');
 Route::get('/home', [HomeController::class, 'index']);

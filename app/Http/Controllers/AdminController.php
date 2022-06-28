@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -56,9 +57,13 @@ class AdminController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit(User $admin)
     {
-        //
+        $roles = Role::all();
+        return view('admins.edit')->with([
+            "roles" => $roles,
+            "admin" => $admin
+        ]);
     }
 
     /**
@@ -68,9 +73,10 @@ class AdminController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $admin)
     {
-        //
+        $admin->roles()->sync($request->roles);
+        return redirect()->route('admins.index');
     }
 
     /**
@@ -79,8 +85,15 @@ class AdminController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(User $admin)
     {
-        //
+        $admin->roles()->detach();
+        $admin->delete();
+        return redirect()->route('admins.index');
+    }
+    public function log(){
+        Session()->flush();
+        return redirect('/main');
+        // return 'helo';
     }
 }

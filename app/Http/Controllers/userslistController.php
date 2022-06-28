@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\userslist;
 use App\Http\Requests\allusersRequest;
 use RealRashid\SweetAlert\Facades\Alert;
+use Gate;
 
 
 class userslistController extends Controller
@@ -28,6 +29,9 @@ class userslistController extends Controller
      */
     public function create()
     {
+        if(Gate::denies('add-student')){
+            return redirect(route('users.index'));
+        }
         return view('adduser');
     }
 
@@ -39,6 +43,7 @@ class userslistController extends Controller
      */
     public function store(allusersRequest $request)
     {
+        
         userslist::create($request->all());
         return redirect()->route('users.index')->with('added','New User Added Successfully!');
     }
@@ -62,6 +67,9 @@ class userslistController extends Controller
      */
     public function edit($id)
     {
+        if(Gate::denies('edit-student')){
+            return redirect(route('users.index'));
+        }
         $stu = userslist::find($id);
         return view('edituser',compact('stu'));   
     }
@@ -89,6 +97,9 @@ class userslistController extends Controller
      */
     public function destroy($id)
     {
+        if(Gate::denies('delete-student')){
+            return redirect(route('users.index'));
+        }
         $studt = userslist::find($id);
         $studt->delete();
         Alert::success('Record Deleted Successfully', 'Success Message');
